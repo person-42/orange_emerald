@@ -12,3 +12,4 @@ for Anyone who wants to help/pull request this project, I would recommend helpin
 10. add a nether dimension
 11. add an end dimension
 12. add a hunger bar that depletes health if below 0
+13. fix the black spaces between the blocks WITHOUT breaking the "available for all sizes" rule.
