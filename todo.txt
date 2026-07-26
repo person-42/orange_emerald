@@ -13,3 +13,4 @@ for Anyone who wants to help/pull request this project, I would recommend helpin
 11. add an end dimension
 12. add a hunger bar that depletes health if below 0
 13. fix the black spaces between the blocks WITHOUT breaking the "available for all sizes" rule.
+14. add sound (not music) to the game to it sound better.
