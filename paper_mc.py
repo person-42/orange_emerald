@@ -1,8 +1,6 @@
 import datetime
 import random
-
 import pygame
-
 pygame.init()
 class NoBlockError(Exception):
     def __init__(self, message):
@@ -529,10 +527,17 @@ def random_end_chunk(pos):
     pass
 # BAD_CHARACTERS LOL
 #!£$?؟
-class hotbar(pygame.sprite.Sprite):
+class hotbar_slot(pygame.sprite.Sprite):
     def __init__(self,number):
         super().__init__()
-
+        self.image=pygame.image.load("images/hotbar_slot.png")
+        self.image=pygame.transform.scale(self.image, ( BLOCK_WIDTH*3, BLOCK_HEIGHT*3))
+        self.rect=self.image.get_rect()
+        self.goto(SPACE_SIZE*2.95+number*BLOCK_WIDTH*3,SCREEN_Y-STRIP_SIZE/1.5)
+    def goto(self,x,y):
+        self.rect.x=x
+        self.rect.y=y
+hotbar=pygame.sprite.Group()
 class heart(pygame.sprite.Sprite):
     def __init__(self,player__,number):
         super().__init__()
@@ -546,7 +551,7 @@ class heart(pygame.sprite.Sprite):
         self.hp=player_list[self.player__].get_hearts()
         self.update_health()
         self.number=number
-        self.goto(y=screen.get_size()[1] - BLOCK_WIDTH * 2.6, x=SPACE_SIZE / 1.4 + ((HEART_SIZE + (HEART_SIZE // 10)) * number))
+        self.goto(y=SCREEN_Y - BLOCK_WIDTH * 2.6, x=SPACE_SIZE / 1.4 + ((HEART_SIZE + (HEART_SIZE // 10)) * number))
     def empty_heart(self):
         self.image=pygame.image.load("../orange_emerald/images/empty_heart.png")
         self.image=pygame.transform.scale(self.image, ( HEART_SIZE, HEART_SIZE))
@@ -692,10 +697,14 @@ while running:
         sprites.remove(r)
     for w in drp_sprites:
         drp_sprites.remove(w)
-    for a in range(1, 10):
+    for i in hotbar:
+        hotbar.remove(i)
+    for a in range(1, 11):
         heart_list.add(heart(controlled_player_name, a))
-    for a in range (1,8):
+    for a in range (1,9):
         heart_list.add(gold_heart(controlled_player_name, a))
+    for a in range(1,10):
+        hotbar.add(hotbar_slot(a))
     controlled_player = player_list[controlled_player_name]
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -807,5 +816,6 @@ while running:
         hearts.update_health()
     drp_sprites.draw(screen)
     players.draw(screen)
+    hotbar.draw(screen)
     heart_list.draw(screen)
     pygame.display.flip()
