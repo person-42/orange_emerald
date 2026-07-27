@@ -1,13 +1,13 @@
 import datetime
 import random
 import pygame
+from biomes import *
 pygame.init()
 class NoBlockError(Exception):
     def __init__(self, message):
         self.message = message
         super().__init__(self.message)
 screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
-all_blocks = [[], [], [], [], [], []]  #-+-+-+ negative chunk,positive chunk
 pygame.display.set_caption("PAPER MINECRAFT")
 player_list = {}
 players_in_chunks = {}
@@ -25,6 +25,7 @@ DROP_SIZE=BLOCK_WIDTH / 2 + BLOCK_WIDTH / 7
 HEART_SIZE = BLOCK_WIDTH * 1.5
 FALL_SPEED = BLOCK_WIDTH / 3
 PLAYER_WIDTH,PLAYER_HEIGHT= ((BLOCK_WIDTH / 2) + (BLOCK_WIDTH / 15)) * 2, BLOCK_WIDTH * 2.5
+slot=1
 def calculate_leave_drops():
     rand = random.randint(1, 20)
     if rand == 1:
@@ -48,192 +49,6 @@ def remove_minus_and_add_1(thing_):
         thing_*=-1
         thing_+=1
     return thing_
-def forest(level, x_pos=0, chunk_list=1, chunk_number=0):
-    if level < 12:
-        ere = "air"
-    elif level == 12:
-        randomizer = random.randint(1, 9)
-        if randomizer == 2:
-            try:
-                ere = "air"
-                if x_pos != 1:
-                    all_blocks[chunk_list][chunk_number][(31 * x_pos - 1) + level - 30].change_type("log")
-                    all_blocks[chunk_list][chunk_number][(31 * x_pos - 1) + level - 31].change_type("log")
-                    all_blocks[chunk_list][chunk_number][(31 * x_pos - 1) + level - 32].change_type("log")
-                    all_blocks[chunk_list][chunk_number][(31 * x_pos - 1) + level - 33].change_type("leaves")
-                    all_blocks[chunk_list][chunk_number][(31 * x_pos - 1) + level - 34].change_type("leaves")
-                    all_blocks[chunk_list][chunk_number][(31 * x_pos - 1) + level - 64].change_type("leaves")
-                    all_blocks[chunk_list][chunk_number][(31 * x_pos - 1) + level - 65].change_type("leaves")
-                    all_blocks[chunk_list][chunk_number][(31 * x_pos - 1) + level - 2].change_type("leaves")
-                    all_blocks[chunk_list][chunk_number][(31 * x_pos - 1) + level - 3].change_type("leaves")
-                    all_blocks[chunk_list][chunk_number][(31 * x_pos - 1) + level - 35].change_type("leaves")
-            except IndexError:
-                ere = "air"
-        else:
-            ere = "air"
-    elif level == 13:
-        ere = "grass"
-    elif level < 17:
-        ere = "dirt"
-        if level == 14:
-            randomizer = random.randint(1, 60)
-            if randomizer == 1:
-                try:
-                    if x_pos != 1:
-                        ere = "water"
-                        all_blocks[chunk_list][chunk_number][(31 * x_pos - 1) + level].change_type("water")
-                        all_blocks[chunk_list][chunk_number][(31 * x_pos - 31) + level].change_type("water")
-                        all_blocks[chunk_list][chunk_number][(31 * x_pos - 32) + level].change_type("water")
-                        all_blocks[chunk_list][chunk_number][(31 * x_pos - 62) + level].change_type("water")
-                        all_blocks[chunk_list][chunk_number][(31 * x_pos - 63) + level].change_type("water")
-                    else:
-                        ere = "dirt"
-                except IndexError:
-                    ere = "dirt"
-    elif level < 30:
-        randomizer = random.randint(0, 600)
-        if randomizer < 2:
-            ere = "emerald ore"
-        elif randomizer < 5:
-            ere = "diamond ore"
-        elif randomizer < 12:
-            ere = "iron ore"
-        elif randomizer < 18:
-            ere = "gold ore"
-        elif randomizer < 24:
-            ere = "coal ore"
-        elif randomizer < 31:
-            ere = "copper ore"
-        elif randomizer < 36:
-            ere = "lapis ore"
-        elif randomizer < 40:
-            ere = "redstone ore"
-        elif randomizer < 44:
-            ere = "lava"
-        else:
-            ere = "stone"
-    else:
-        ere = "bedrock"
-    return ere
-def snowy_forest(level, x_pos=0, chunk_list=1, chunk_number=0):
-    if level < 12:
-        ere = "air"
-    elif level == 12:
-        randomizer = random.randint(1, 7)
-        if randomizer == 5:
-            try:
-                ere = "air"
-                if x_pos > 1:
-                    all_blocks[chunk_list][chunk_number][(31 * x_pos - 1) + level - 30].change_type("log")
-                    all_blocks[chunk_list][chunk_number][(31 * x_pos - 1) + level - 31].change_type("log")
-                    all_blocks[chunk_list][chunk_number][(31 * x_pos - 1) + level - 32].change_type("log")
-                    all_blocks[chunk_list][chunk_number][(31 * x_pos - 1) + level - 33].change_type("leaves")
-                    all_blocks[chunk_list][chunk_number][(31 * x_pos - 1) + level - 34].change_type("leaves")
-                    all_blocks[chunk_list][chunk_number][(31 * x_pos - 1) + level - 64].change_type("leaves")
-                    all_blocks[chunk_list][chunk_number][(31 * x_pos - 1) + level - 65].change_type("leaves")
-                    all_blocks[chunk_list][chunk_number][(31 * x_pos - 1) + level - 2].change_type("leaves")
-                    all_blocks[chunk_list][chunk_number][(31 * x_pos - 1) + level - 3].change_type("leaves")
-                    all_blocks[chunk_list][chunk_number][(31 * x_pos - 1) + level - 35].change_type("leaves")
-            except IndexError:
-                ere = "air"
-        else:
-            ere = "air"
-    elif level == 13:
-        ere = "snow"
-    elif level < 17:
-        ere = "dirt"
-        if level == 14:
-            randomizer = random.randint(2, 60)
-            if randomizer == 1:
-                try:
-                    if x_pos != 1:
-                        ere = "water"
-                        all_blocks[chunk_list][chunk_number][(31 * x_pos - 1) + level].change_type("water")
-                        all_blocks[chunk_list][chunk_number][(31 * x_pos - 31) + level].change_type("water")
-                        all_blocks[chunk_list][chunk_number][(31 * x_pos - 32) + level].change_type("water")
-                        all_blocks[chunk_list][chunk_number][(31 * x_pos - 62) + level].change_type("water")
-                        all_blocks[chunk_list][chunk_number][(31 * x_pos - 63) + level].change_type("water")
-                    else:
-                        ere = "dirt"
-                except IndexError:
-                    ere = "dirt"
-    elif level < 30:
-        randomizer = random.randint(0, 600)
-        if randomizer < 2:
-            ere = "emerald ore"
-        elif randomizer < 5:
-            ere = "diamond ore"
-        elif randomizer < 12:
-            ere = "iron ore"
-        elif randomizer < 18:
-            ere = "gold ore"
-        elif randomizer < 24:
-            ere = "coal ore"
-        elif randomizer < 31:
-            ere = "copper ore"
-        elif randomizer < 36:
-            ere = "lapis ore"
-        elif randomizer < 40:
-            ere = "redstone ore"
-        elif randomizer < 44:
-            ere = "lava"
-        else:
-            ere = "stone"
-    else:
-        ere = "bedrock"
-    return ere
-def desert(level, x_pos=0, chunk_list=1, chunk_number=0):
-    if level == 30:
-        ere = "bedrock"
-    elif level < 13:
-        ere = "air"
-    elif level == 13:
-        randomizer = random.randint(1, 9)
-        if randomizer == 2:
-            ere = "cactus"
-            all_blocks[chunk_list][chunk_number][(31 * x_pos - 1) + level].change_type("cactus")
-        else:
-            ere = "air"
-    elif level < 17:
-        ere = "sand"
-        if level == 15:
-            randomizer = random.randint(1, 40)
-            if randomizer == 1:
-                try:
-                    if x_pos != 1:
-                        ere = "water"
-                        all_blocks[chunk_list][chunk_number][(31 * x_pos - 1) + level].change_type("water")
-                        all_blocks[chunk_list][chunk_number][(31 * x_pos - 31) + level].change_type("water")
-                        all_blocks[chunk_list][chunk_number][(31 * x_pos - 32) + level].change_type("water")
-                        all_blocks[chunk_list][chunk_number][(31 * x_pos - 62) + level].change_type("water")
-                        all_blocks[chunk_list][chunk_number][(31 * x_pos - 63) + level].change_type("water")
-                    else:
-                        ere = "sand"
-                except IndexError:
-                    ere = "sand"
-    else:
-        randomizer = random.randint(0, 600)
-        if randomizer < 2:
-            ere = "emerald ore"
-        elif randomizer < 5:
-            ere = "diamond ore"
-        elif randomizer < 12:
-            ere = "iron ore"
-        elif randomizer < 18:
-            ere = "gold ore"
-        elif randomizer < 24:
-            ere = "coal ore"
-        elif randomizer < 31:
-            ere = "copper ore"
-        elif randomizer < 36:
-            ere = "lapis ore"
-        elif randomizer < 40:
-            ere = "redstone ore"
-        elif randomizer < 44:
-            ere = "lava"
-        else:
-            ere = "stone"
-    return ere
 class chunk:
     def __init__(self, number, pos_neg="+", dimension="overworld", biome="forest"):
         super().__init__()
@@ -247,25 +62,26 @@ class chunk:
                 all_blocks[0].append([])
                 for l in range(57):  #x position
                     for i in range(31):
-                        if biome == "forest":
+                        blockya=None
+                        if biome == "forest" or biome=="snowy forest":
                             blockya = forest(i, l, 0, number)
-                        if biome == "desert":
+                            if blockya=="grass" and biome=="snowy forest":
+                                blockya="snow"
+                        elif biome == "desert":
                             blockya = desert(i, l, 0, number)
-                        if biome=="snowy forest":
-                            blockya = snowy_forest(i, l, 0, number)
                         all_blocks[0][number].append(block(x__ =int(l * BLOCK_WIDTH + SPACE_SIZE), y__= int(i * BLOCK_WIDTH), type_=blockya))
             else:
                 all_blocks[1].append([])
                 for l in range(57):
                     for i in range(31):
-                        if biome == "forest":
-                            tyry = forest(i, l, 1, number)
-                        if biome == "desert":
-                            tyry = desert(i, l, 1, number)
-                        if biome=="snowy forest":
-                            tyry = snowy_forest(i, l, 0, number)
-                        all_blocks[1][number].append(block(x__=int(l * BLOCK_WIDTH + SPACE_SIZE), y__=int(i * BLOCK_WIDTH), type_=tyry))
-
+                        blockya = None
+                        if biome == "forest" or biome == "snowy forest":
+                            blockya = forest(i, l, 1, number)
+                            if blockya == "grass" and biome == "snowy forest":
+                                blockya = "snow"
+                        elif biome == "desert":
+                            blockya = desert(i, l, 1, number)
+                        all_blocks[1][number].append(block(x__=int(l * BLOCK_WIDTH + SPACE_SIZE), y__=int(i * BLOCK_WIDTH), type_=blockya))
 class block(pygame.sprite.Sprite):
     def __init__(self, type_="grass", x__=0, y__=0):
         super().__init__()
@@ -374,7 +190,7 @@ class block(pygame.sprite.Sprite):
 class player(pygame.sprite.Sprite):
     def __init__(self, name):
         super().__init__()
-        self.image = pygame.image.load("../orange_emerald/images/player_character.png")
+        self.image = pygame.image.load("images/player_character.png")
         self.image=pygame.transform.scale(self.image, (PLAYER_WIDTH, PLAYER_HEIGHT))
         self.items = {"logs": 0, "planks": 0, "stone": 0, "grass": 0, "dirt": 0,
                       "cobblestone": 0, "emerald": 0,
@@ -502,7 +318,7 @@ def is_collide(x1, x2, y1, y2, x_reach=PLAYER_WIDTH//2, y_reach=PLAYER_HEIGHT):
             return False
     else:
         return False
-overworld_biomes = ["forest",'desert',"snowy forest"]
+overworld_biomes = ["snowy forest","forest","desert"]
 nether_biomes = []
 end_biomes = []
 def add_chunks():
@@ -534,15 +350,28 @@ class hotbar_slot(pygame.sprite.Sprite):
         self.image=pygame.transform.scale(self.image, ( BLOCK_WIDTH*3, BLOCK_HEIGHT*3))
         self.rect=self.image.get_rect()
         self.goto(SPACE_SIZE*2.95+number*BLOCK_WIDTH*3,SCREEN_Y-STRIP_SIZE/1.5)
+        self.number=number
     def goto(self,x,y):
         self.rect.x=x
         self.rect.y=y
+    def select(self):
+        self.image=pygame.image.load("images/selected_hotbar.png")
+        self.image=pygame.transform.scale(self.image, ( BLOCK_WIDTH*3, BLOCK_HEIGHT*3))
+    def unselect(self):
+        self.image=pygame.image.load("images/hotbar_slot.png")
+        self.image=pygame.transform.scale(self.image, ( BLOCK_WIDTH*3, BLOCK_HEIGHT*3))
+    def update_slot(self):
+        global slot
+        if slot==self.number:
+            self.select()
+        else:
+            self.unselect()
 hotbar=pygame.sprite.Group()
 class heart(pygame.sprite.Sprite):
     def __init__(self,player__,number):
         super().__init__()
         global player_list
-        self.image=pygame.image.load("../orange_emerald/images/heart.png")
+        self.image=pygame.image.load("images/heart.png")
         self.rect=self.image.get_rect()
         self.image=pygame.transform.scale(self.image, ( HEART_SIZE, HEART_SIZE))
         self.player__ = player__
@@ -551,20 +380,21 @@ class heart(pygame.sprite.Sprite):
         self.hp=player_list[self.player__].get_hearts()
         self.update_health()
         self.number=number
-        self.goto(y=SCREEN_Y - BLOCK_WIDTH * 2.6, x=SPACE_SIZE / 1.4 + ((HEART_SIZE + (HEART_SIZE // 10)) * number))
+        self.goto(y=SCREEN_Y - BLOCK_WIDTH * 2, x=SPACE_SIZE / 1.4 + ((HEART_SIZE + (HEART_SIZE // 10)) * number))
     def empty_heart(self):
-        self.image=pygame.image.load("../orange_emerald/images/empty_heart.png")
+        self.image=pygame.image.load("images/empty_heart.png")
         self.image=pygame.transform.scale(self.image, ( HEART_SIZE, HEART_SIZE))
     def half_heart(self):
-        self.image=pygame.image.load("../orange_emerald/images/half_heart.png")
+        self.image=pygame.image.load("images/half_heart.png")
         self.image=pygame.transform.scale(self.image, ( HEART_SIZE, HEART_SIZE))
     def full_heart(self):
-        self.image=pygame.image.load("../orange_emerald/images/heart.png")
+        self.image=pygame.image.load("images/heart.png")
         self.image=pygame.transform.scale(self.image, ( HEART_SIZE, HEART_SIZE))
     def goto(self,x,y):
         self.rect.x=x
         self.rect.y=y
     def update_health(self):
+        self.goto(y=SCREEN_Y - BLOCK_WIDTH * 2, x=SPACE_SIZE / 1.4 + ((HEART_SIZE + (HEART_SIZE // 10)) * self.number))
         self.hp=player_list[self.player__].get_hearts()
         player_list[self.player__].update_health()
         if 0 < self.hp <= 50 :
@@ -617,7 +447,7 @@ class gold_heart(pygame.sprite.Sprite):
     def __init__(self,player__,number):
         super().__init__()
         global player_list
-        self.image=pygame.image.load("../orange_emerald/images/gold_heart.png")
+        self.image=pygame.image.load("images/gold_heart.png")
         self.rect=self.image.get_rect()
         self.image=pygame.transform.scale(self.image, ( HEART_SIZE, HEART_SIZE))
         self.player__ = player__
@@ -626,12 +456,12 @@ class gold_heart(pygame.sprite.Sprite):
         self.hp=player_list[self.player__].get_gold_hearts()
         self.update_health()
         self.number=int(number)
-        self.goto(y=screen.get_size()[1] - BLOCK_WIDTH * 4.1, x=SPACE_SIZE / 1.4 + ((HEART_SIZE + (HEART_SIZE // 10)) * number))
+        self.goto(y=screen.get_size()[1] - BLOCK_WIDTH * 4.5, x=SPACE_SIZE / 1.4 + ((HEART_SIZE + (HEART_SIZE // 10)) * number))
     def half_heart(self):
-        self.image=pygame.image.load("../orange_emerald/images/half_gold_heart.png")
+        self.image=pygame.image.load("images/half_gold_heart.png")
         self.image=pygame.transform.scale(self.image, ( HEART_SIZE, HEART_SIZE))
     def full_heart(self):
-        self.image=pygame.image.load("../orange_emerald/images/gold_heart.png")
+        self.image=pygame.image.load("images/gold_heart.png")
         self.image=pygame.transform.scale(self.image, ( HEART_SIZE, HEART_SIZE))
     def empty_heart(self):
         self.image = pygame.Surface((HEART_SIZE, HEART_SIZE))
@@ -791,6 +621,34 @@ while running:
         if jumper == 1:
             player_list[controlled_player_name].jump()
     reeee=-1
+    if keys[pygame.K_z]:
+        slot += -1
+    if keys[pygame.K_x]:
+        slot += 1
+    if slot==0:
+        slot = 9
+    if slot==10:
+        slot=1
+    if keys[pygame.K_1]:
+        slot=1
+    if keys[pygame.K_2]:
+        slot=2
+    if keys[pygame.K_3]:
+        slot=3
+    if keys[pygame.K_4]:
+        slot=4
+    if keys[pygame.K_5]:
+        slot=5
+    if keys[pygame.K_6]:
+        slot=6
+    if keys[pygame.K_7]:
+        slot=7
+    if keys[pygame.K_8]:
+        slot = 8
+    if keys[pygame.K_9]:
+        slot = 9
+    for tr in hotbar:
+        tr.update_slot()
     destroyer=0
     for drp in dropped_items:
         reeee+=1
