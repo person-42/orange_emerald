@@ -2,4 +2,8 @@ from flask import jsonify, request, make_response, send_from_directory, abort, r
 app = Flask(__name__)
 @app.route('/')
 def home_page():
-    pass
+    return render_template('home_page.html')
+def run():
+    app.run()
+if __name__ == '__main__':
+    run()
