@@ -1,6 +1,6 @@
 for Anyone who wants to help/pull request this project, I would recommend helping me do these things:
 
-1. finish working on hotbar class
+1. finish working on hotbar class✅
 2. add an inventory that picks up items
 3. add more blocks : ancient debris , obsidian , gold blocks , diamond blocks , redstone blocks , lapis blocks , emerald blocks , coal blocks , iron blocks (if you can think of more then help is appreciated)
 4. give images to  blocks that use on 1 color
@@ -8,9 +8,9 @@ for Anyone who wants to help/pull request this project, I would recommend helpin
 6. add a chat 
 7. add block placing
 8. add a crafting table/furnace/smithing table
-9. make the screen resolution work  better : currently the screen goes to fullscreen and then gets the size working slightly well except for high speed/jumps
+9. make the screen resolution work  better : currently the screen goes to fullscreen and then gets the size working slightly well except for high speed/jumps✅
 10. add a nether dimension
 11. add an end dimension
 12. add a hunger bar that depletes health if below 0
-13. fix the black spaces between the blocks WITHOUT breaking the "available for all sizes" rule.
+13. fix the black spaces between the blocks WITHOUT breaking the "available for all sizes" rule.✅
 14. add sound (not music) to the game to it sound better.
