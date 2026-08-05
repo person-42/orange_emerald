@@ -2,22 +2,14 @@ from paper_mc_classes import *
 slot=1
 running=True
 while running:
-    for i in heart_list:
-        heart_list.remove(i)
-    for u in held_items:
-        held_items.remove(u)
-    for e in hotbar_itemz:
-        hotbar_itemz.remove(e)
-    for f in players:
-        players.remove(f)
-    for r in sprites:
-        sprites.remove(r)
-    for w in drp_sprites:
-        drp_sprites.remove(w)
-    for i in hotbar:
-        hotbar.remove(i)
-    for r in hotbar_amount:
-        hotbar_amount.remove(r)
+    heart_list.empty()
+    held_items.empty()
+    hotbar_itemz.empty()
+    players.empty()
+    sprites.empty()
+    drp_sprites.empty()
+    hotbar.empty()
+    hotbar_amount.empty()
     for a in range(1,10):
         hotbar_amount.add(hotbar_text(a))
     for a in range(1, 11):
@@ -55,6 +47,7 @@ while running:
     does_fall = 1
     cactus_killer = 0
     lava_burner = 0
+    water_lander = 0
     for i in all_blocks[position][remove_minus_and_add_1(players_in_chunks[controlled_player_name])]:
         if is_collide(i.rect.x, player_list[controlled_player_name].rect.x, player_list[controlled_player_name].rect.y,
                       i.rect.y) and not i.is_air():
@@ -65,7 +58,12 @@ while running:
         if is_collide(i.rect.x, player_list[controlled_player_name].rect.x, player_list[controlled_player_name].rect.y,
                       i.rect.y) and i.give_type() == "lava":
             lava_burner = 1
-    if does_fall == 1:
+        if is_collide(i.rect.x, player_list[controlled_player_name].rect.x, player_list[controlled_player_name].rect.y,
+                      i.rect.y) and i.give_type() == "water":
+            water_lander = 1
+    if does_fall == 0:
+        player_list[controlled_player_name].land(no_fall_damage=water_lander == 1)
+    else:
         player_list[controlled_player_name].fall()
     if cactus_killer == 1:
         player_list[controlled_player_name].damage(7)
@@ -166,10 +164,11 @@ while running:
                 destroyer = 1
         if drp_fall == 1:
             drp.fall()
+        drp.update_position()
         if drp.is_in_chunk(players_in_chunks[controlled_player_name]):
             if drp.is_in_dimension(players_in_dimension[controlled_player_name]):
                 drp_sprites.add(drp)
-        if drop.should_despawn(drp) or destroyer == 1:
+        if drp.should_despawn() or destroyer == 1:
             del dropped_items[reeee]
         if is_collide(player_list[controlled_player_name].rect.x, drp.rect.x, drp.rect.y,
                       player_list[controlled_player_name].rect.y) and drp.is_in_chunk(
