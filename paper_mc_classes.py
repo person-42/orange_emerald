@@ -5,6 +5,7 @@ from biomes import *
 pygame.init()
 pygame.font.init()
 
+
 class NoBlockError(Exception):
     def __init__(self, message):
         self.message = message
@@ -21,8 +22,8 @@ sprites = pygame.sprite.Group()
 dropped_items = []
 SCREEN_X = screen.get_size()[0]
 SCREEN_Y = screen.get_size()[1]
-#SCREEN_X=1000#remove
-#SCREEN_Y=500#remove
+# SCREEN_X=1000#remove
+# SCREEN_Y=500#remove
 SPACE_SIZE = SCREEN_X / 9.6
 STRIP_SIZE = SCREEN_Y / 7.2
 BLOCK_WIDTH = int((SCREEN_X - SPACE_SIZE) / 57)
@@ -31,7 +32,10 @@ DROP_WIDTH = BLOCK_WIDTH / 2 + BLOCK_WIDTH / 7
 DROP_HEIGHT = BLOCK_HEIGHT / 2 + BLOCK_WIDTH / 7
 HEART_SIZE = BLOCK_HEIGHT * 1.5
 FALL_SPEED = BLOCK_WIDTH / 3
-PLAYER_WIDTH, PLAYER_HEIGHT = ((BLOCK_WIDTH / 2) + (BLOCK_WIDTH / 15)) * 2, BLOCK_HEIGHT * 2.5
+PLAYER_WIDTH, PLAYER_HEIGHT = (
+    ((BLOCK_WIDTH / 2) + (BLOCK_WIDTH / 15)) * 2,
+    BLOCK_HEIGHT * 2.5,
+)
 slot = 1
 
 
@@ -45,17 +49,36 @@ def calculate_leave_drops():
         return ""
 
 
-block_image_list = {"iron ore": "images/iron_ore.png", "coal ore": "images/coal_ore.png",
-                    "copper ore": "images/copper_ore.png", "diamond ore": "images/diamond_ore.png",
-                    "gold ore": "images/gold_ore.png", "emerald ore": "images/emerald_ore.png",
-                    "lapis ore": "images/lapis_ore.png", "redstone ore": "images/redstone_ore.png",
-                    "nether gold ore": "images/nether_gold_ore.png",
-                    "quartz ore": "images/quartz_ore.png"}
-block_color_list = {"netherack": "#842020", "sand": "#ccb46d", "air": "#0dcaf0", "dirt": "#653208", "leaves": "#486317",
-                    "stone": "#585B5C", "planks": "lightsalmon",
-                    "bedrock": "#22202c", "end stone": "#C4BF4F", "grass": "green", "water": "blue",
-                    "snow": "#f0e9d2", "cactus": "#03550c", "log": "#5b1a17", "lava": "#b54d05",
-                    "cobblestone": "dimgray"}
+block_image_list = {
+    "iron ore": "images/iron_ore.png",
+    "coal ore": "images/coal_ore.png",
+    "copper ore": "images/copper_ore.png",
+    "diamond ore": "images/diamond_ore.png",
+    "gold ore": "images/gold_ore.png",
+    "emerald ore": "images/emerald_ore.png",
+    "lapis ore": "images/lapis_ore.png",
+    "redstone ore": "images/redstone_ore.png",
+    "nether gold ore": "images/nether_gold_ore.png",
+    "quartz ore": "images/quartz_ore.png",
+}
+block_color_list = {
+    "netherack": "#842020",
+    "sand": "#ccb46d",
+    "air": "#0dcaf0",
+    "dirt": "#653208",
+    "leaves": "#486317",
+    "stone": "#585B5C",
+    "planks": "lightsalmon",
+    "bedrock": "#22202c",
+    "end stone": "#C4BF4F",
+    "grass": "green",
+    "water": "blue",
+    "snow": "#f0e9d2",
+    "cactus": "#03550c",
+    "log": "#5b1a17",
+    "lava": "#b54d05",
+    "cobblestone": "dimgray",
+}
 
 
 def remove_minus_and_add_1(thing_):
@@ -76,7 +99,7 @@ class chunk:
         else:
             if pos_neg == "-":
                 all_blocks[0].append([])
-                for l in range(57):  #x position
+                for l in range(57):  # x position
                     for i in range(31):
                         blockya = None
                         if biome == "forest" or biome == "snowy forest":
@@ -86,7 +109,12 @@ class chunk:
                         elif biome == "desert":
                             blockya = desert(i, l, 0, number)
                         all_blocks[0][number].append(
-                            block(x__=int(l * BLOCK_WIDTH + SPACE_SIZE), y__=int(i * BLOCK_HEIGHT), type_=blockya))
+                            block(
+                                x__=int(l * BLOCK_WIDTH + SPACE_SIZE),
+                                y__=int(i * BLOCK_HEIGHT),
+                                type_=blockya,
+                            )
+                        )
             else:
                 all_blocks[1].append([])
                 for l in range(57):
@@ -99,7 +127,12 @@ class chunk:
                         elif biome == "desert":
                             blockya = desert(i, l, 1, number)
                         all_blocks[1][number].append(
-                            block(x__=int(l * BLOCK_WIDTH + SPACE_SIZE), y__=int(i * BLOCK_HEIGHT), type_=blockya))
+                            block(
+                                x__=int(l * BLOCK_WIDTH + SPACE_SIZE),
+                                y__=int(i * BLOCK_HEIGHT),
+                                type_=blockya,
+                            )
+                        )
 
 
 class block(pygame.sprite.Sprite):
@@ -111,44 +144,92 @@ class block(pygame.sprite.Sprite):
         rtye = block_color_list
         image_rtrt = block_image_list
         self.image_list = image_rtrt
-        drop_list = {"log": "log", "stone": "cobblestone",
-                     "grass": "dirt", "coal ore": "coal",
-                     "netherack": "netherack", "sand": "sand", "dirt": "dirt", }
+        drop_list = {
+            "log": "log",
+            "stone": "cobblestone",
+            "grass": "dirt",
+            "coal ore": "coal",
+            "netherack": "netherack",
+            "sand": "sand",
+            "dirt": "dirt",
+        }
         unbreakable_blocks = ["bedrock", "air", "water", "lava"]
         self.unbreakable_blocks = unbreakable_blocks
         self.rtye = rtye
         self.image_list = image_rtrt
-        drop_list = {"log": "log", "stone": "cobblestone",
-                     "grass": "dirt", "coal ore": "coal",
-                     "netherack": "netherack", "sand": "sand", "dirt": "dirt",
-                     "leaves": f"{calculate_leave_drops()}", "snow": "snowball",
-                     "cactus": "cactus", "iron ore": "raw iron", "copper ore": "raw copper", "diamond ore": "diamond",
-                     "gold ore": "raw gold",
-                     "emerald ore": "emerald", "lapis ore": "lapis",
-                     "redstone ore": "redstone", "nether gold ore": "gold nugget", "quartz ore": "nether quartz",
-                     "cobblestone": "cobblestone", "end stone": "end stone"}
+        drop_list = {
+            "log": "log",
+            "stone": "cobblestone",
+            "grass": "dirt",
+            "coal ore": "coal",
+            "netherack": "netherack",
+            "sand": "sand",
+            "dirt": "dirt",
+            "leaves": f"{calculate_leave_drops()}",
+            "snow": "snowball",
+            "cactus": "cactus",
+            "iron ore": "raw iron",
+            "copper ore": "raw copper",
+            "diamond ore": "diamond",
+            "gold ore": "raw gold",
+            "emerald ore": "emerald",
+            "lapis ore": "lapis",
+            "redstone ore": "redstone",
+            "nether gold ore": "gold nugget",
+            "quartz ore": "nether quartz",
+            "cobblestone": "cobblestone",
+            "end stone": "end stone",
+        }
         self.drop_list = drop_list
-        drop_amount = {"copper ore": random.randint(1, 3),
-                       "lapis ore": random.randint(1, 8), "redstone ore": random.randint(1, 5),
-                       "snow": random.randint(1, 3),
-                       "nether gold ore": random.randint(2, 6),
-                       "quartz ore": random.randint(1, 3)}
+        drop_amount = {
+            "copper ore": random.randint(1, 3),
+            "lapis ore": random.randint(1, 8),
+            "redstone ore": random.randint(1, 5),
+            "snow": random.randint(1, 3),
+            "nether gold ore": random.randint(2, 6),
+            "quartz ore": random.randint(1, 3),
+        }
         self.health = 100
-        tool_list = {"log": "axe", "grass": "shovel", "dirt": "shovel", "stone": "pickaxe", "leaves": "hoe",
-                     "netherack": "pickaxe", "snow": "shovel", "cactus": "axe", "cobblestone": "pickaxe",
-                     "planks": "axe",
-                     "sand": "shovel", "end stone": "pickaxe", "iron ore": "pickaxe",
-                     "coal ore": "pickaxe", "copper ore": "pickaxe",
-                     "diamond ore": "pickaxe", "gold ore": "pickaxe", "emerald ore": "pickaxe",
-                     "redstone ore": "pickaxe",
-                     "lapis ore": "pickaxe", "nether gold ore": "pickaxe", "quartz ore": "pickaxe"}
+        tool_list = {
+            "log": "axe",
+            "grass": "shovel",
+            "dirt": "shovel",
+            "stone": "pickaxe",
+            "leaves": "hoe",
+            "netherack": "pickaxe",
+            "snow": "shovel",
+            "cactus": "axe",
+            "cobblestone": "pickaxe",
+            "planks": "axe",
+            "sand": "shovel",
+            "end stone": "pickaxe",
+            "iron ore": "pickaxe",
+            "coal ore": "pickaxe",
+            "copper ore": "pickaxe",
+            "diamond ore": "pickaxe",
+            "gold ore": "pickaxe",
+            "emerald ore": "pickaxe",
+            "redstone ore": "pickaxe",
+            "lapis ore": "pickaxe",
+            "nether gold ore": "pickaxe",
+            "quartz ore": "pickaxe",
+        }
         self.tool_list = tool_list
         hardness_list = {"log": 25, "netherack": 35}
         self.hardness_list = hardness_list
         # 0=fist,1=wood/gold,2=stone/copper,3=iron,4=diamond/netherite
-        minimum_material = {"log": 0, "stone": 1, "plank": 0, "coal ore": 1, "copper ore": 1, "iron ore": 2,
-                            "leaves": 0, "cactus": 0,
-                            "gold ore": 3, "snow": 1}
+        minimum_material = {
+            "log": 0,
+            "stone": 1,
+            "plank": 0,
+            "coal ore": 1,
+            "copper ore": 1,
+            "iron ore": 2,
+            "leaves": 0,
+            "cactus": 0,
+            "gold ore": 3,
+            "snow": 1,
+        }
         self.minimum_material = minimum_material
         self.drop_amount = drop_amount
         self.rect = self.image.get_rect(center=(30 // 2, 30 // 2))
@@ -186,7 +267,9 @@ class block(pygame.sprite.Sprite):
             self.image = pygame.image.load(block_image_list[new_type])
             self.image = pygame.transform.scale(self.image, (BLOCK_WIDTH, BLOCK_HEIGHT))
         else:
-            raise NoBlockError("Given type is not in any dictionary. No type or color mentioned")
+            raise NoBlockError(
+                "Given type is not in any dictionary. No type or color mentioned"
+            )
 
     def get_size(self):
         return self.rect.size
@@ -209,14 +292,21 @@ class block(pygame.sprite.Sprite):
 
     def broke(self, player_name, material, tool):
         global player_list
+        original_type = self._type_
         self.change_type("air")
-        if (self.minimum_material[self._type_] == 0 or
-                (self.minimum_material[self._type_] >= material and self.tool_list[self._type_] == tool)):
-            if self._type_ not in self.unbreakable_blocks:
-                if not self._type_ in self.drop_amount:
-                    player_list[player_name].items[self.drop_list[self._type_]] += 1
+        if original_type not in self.minimum_material:
+            return
+        if self.minimum_material[original_type] == 0 or (
+                self.minimum_material[original_type] >= material
+                and self.tool_list[original_type] == tool
+        ):
+            if original_type not in self.unbreakable_blocks:
+                if original_type not in self.drop_amount:
+                    player_list[player_name].items[self.drop_list[original_type]] += 1
                 else:
-                    player_list[player_name].items[self.drop_list[self._type_]] += self.drop_amount[self._type_]
+                    player_list[player_name].items[self.drop_list[original_type]] += (
+                        self.drop_amount[original_type]
+                    )
 
 
 class player(pygame.sprite.Sprite):
@@ -280,17 +370,114 @@ class player(pygame.sprite.Sprite):
             "cooked mutton": 0,
             "leather": 0,
             "gold ore": 0,
-            "copper ore":0,
-            "quartz ore":0
+            "copper ore": 0,
+            "quartz ore": 0,
         }
-        self.hotbar_items = {}
-        self.inventory_items = {}
+        self.hotbar_items = {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": "",
+            "8": "",
+            "9": ""
+        }
+        self.hotbar_amount = {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 0,
+            "5": 0,
+            "6": 0,
+            "7": 0,
+            "8": 0,
+            "9": 0
+        }
+        self.inventory_items = {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": "",
+            "8": "",
+            "9": "",
+            "10": "",
+            "11": "",
+            "12": "",
+            "13": "",
+            "14": "",
+            "15": "",
+            "16": "",
+            "17": "",
+            "18": "",
+            "19": "",
+            "20": "",
+            "21": "",
+            "22": "",
+            "23": "",
+            "24": "",
+            "25": "",
+            "26": "",
+            "27": "",
+            "28": "",
+            "29": "",
+            "30": "",
+            "31": "",
+            "32": "",
+            "33": "",
+            "34": "",
+            "35": "",
+            "36": ""
+        }
+        self.inventory_amount = {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 0,
+            "5": 0,
+            "6": 0,
+            "7": 0,
+            "8": 0,
+            "9": 0,
+            "10": 0,
+            "11": 0,
+            "12": 0,
+            "13": 0,
+            "14": 0,
+            "15": 0,
+            "16": 0,
+            "17": 0,
+            "18": 0,
+            "19": 0,
+            "20": 0,
+            "21": 0,
+            "22": 0,
+            "23": 0,
+            "24": 0,
+            "25": 0,
+            "26": 0,
+            "27": 0,
+            "28": 0,
+            "29": 0,
+            "30": 0,
+            "31": 0,
+            "32": 0,
+            "33": 0,
+            "34": 0,
+            "35": 0,
+            "36": 0
+        }
         self.health = 1000
         self.gold_health = 0
         self.speed = BLOCK_WIDTH / 6
         self.jump_speed = BLOCK_HEIGHT / 6
         self.fall_speed = FALL_SPEED
         self.fall_velocity = 0
+        self.fall_start_y = None
         self.spawn_point = (25, 10)
         self.x = self.spawn_point[0]
         self.y = self.spawn_point[1]
@@ -305,43 +492,71 @@ class player(pygame.sprite.Sprite):
 
     def pick_up_item(self, item):
         self.items[item] += 1
-        if item in self.hotbar_items:
-            self.hotbar_items[item] += 1
-        elif item in self.inventory_items:
-            self.inventory_items[item] += 1
-        elif len(self.hotbar_items) <= 8:
-            self.hotbar_items[item] = 1
-        elif len(self.inventory_items) <= 35:
-            self.inventory_items[item] = 1
-        else:
-            self.inventory_full = True
-            drop_item(self.rect.x, self.rect.y, item, players_in_chunks[controlled_player_name],
-                      players_in_dimension[controlled_player_name])
-            self.items[item] -= 1
+        # Stack onto existing hotbar slot
+        for slot, slot_item in self.hotbar_items.items():
+            if slot_item == item:
+                self.hotbar_amount[slot] += 1
+                return
+        # Stack onto existing inventory slot
+        for slot, slot_item in self.inventory_items.items():
+            if slot_item == item:
+                self.inventory_amount[slot] += 1
+                return
+        # Place in first free hotbar slot
+        for slot, slot_item in self.hotbar_items.items():
+            if slot_item == "":
+                self.hotbar_items[slot] = item
+                self.hotbar_amount[slot] = 1
+                return
+        # Place in first free inventory slot
+        for slot, slot_item in self.inventory_items.items():
+            if slot_item == "":
+                self.inventory_items[slot] = item
+                self.inventory_amount[slot] = 1
+                return
+        # Both full — drop the item
+        self.inventory_full = True
+        drop_item(
+            self.x,
+            self.y,
+            item,
+            players_in_chunks[controlled_player_name],
+            players_in_dimension[controlled_player_name],
+        )
+        self.items[item] -= 1
 
     def goto(self, x, y):
         self.go(x, y)
 
     def give_hotbar_slot_items(self, num):
-        qws = list(self.hotbar_items.keys())
-        try:
-            return qws[num - 1]
-        except IndexError:
+        if self.hotbar_items[str(num)] == "":
             return 0
+        else:
+            return self.hotbar_items[str(num)]
 
     def give_hotbar_slot_numbers(self, num):
-        wq = list(self.hotbar_items.values())
-        try:
-            return wq[num -1]
-        except IndexError:
-            return 0
+        return self.hotbar_amount[str(num)]
 
     def is_inventory_full(self):
         return self.inventory_full
 
     def fall(self, multiplier=1):
-        self.y += self.fall_speed * multiplier / BLOCK_HEIGHT
-        self.fall_velocity += self.fall_speed * multiplier
+        if self.fall_start_y is None:
+            self.fall_start_y = self.y
+        self.fall_velocity += self.fall_speed * multiplier * 0.15
+        if self.fall_velocity > FALL_SPEED * 4:
+            self.fall_velocity = FALL_SPEED * 4
+        self.y += self.fall_velocity / BLOCK_HEIGHT
+
+    def land(self, no_fall_damage=False):
+        if self.fall_start_y is not None:
+            if not no_fall_damage:
+                blocks_fallen = self.y - self.fall_start_y
+                if blocks_fallen > 3:
+                    damage_hp = int((blocks_fallen - 3) * 25)
+                    self.damage(damage_hp)
+            self.fall_start_y = None
+        self.fall_velocity = 0
 
     def left(self, multiplier=1):
         self.x -= self.speed * multiplier / BLOCK_WIDTH
@@ -368,12 +583,12 @@ class player(pygame.sprite.Sprite):
         self.y -= self.jump_speed * 10 / BLOCK_HEIGHT
 
     def check_inventory(self):
-        for red, it in self.inventory_items.items():
-            if it == 0:
-                del self.inventory_items[red]
-        for red, it in self.hotbar_items.items():
-            if it == 0:
-                del self.hotbar_items[red]
+        for slot in self.hotbar_items:
+            if self.hotbar_amount[slot] == 0:
+                self.hotbar_items[slot] = ""
+        for slot in self.inventory_items:
+            if self.inventory_amount[slot] == 0:
+                self.inventory_items[slot] = ""
 
     def heal(self, hp=1):
         if self.health < 1000 - hp:
@@ -414,7 +629,7 @@ class drop(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(center=(30 // 2, 30 // 2))
         self.block_image_list = block_image_list
         self.block_color_list = block_color_list
-        self.goto(x + random.randint(-100, 100) / 5, y)
+        self.goto(x + random.randint(-10, 10) / 10, y)
         self.type_ = type_
         self.timer = (datetime.datetime.now().minute + 5) % 60
         self.chunk_ = chunk_
@@ -430,20 +645,20 @@ class drop(pygame.sprite.Sprite):
             self.image = pygame.image.load(block_image_list[new_type])
             self.image = pygame.transform.scale(self.image, (DROP_WIDTH, DROP_HEIGHT))
         else:
-            raise NoBlockError("Given type is not in any dictionary. No image or color mentioned")
-
-    def x(self):
-        return self.rect.x
+            raise NoBlockError(
+                "Given type is not in any dictionary. No image or color mentioned"
+            )
 
     def fall(self):
-        self.rect.y += FALL_SPEED / 2
-
-    def y(self):
-        return self.rect.y
+        self.y += FALL_SPEED / 2 / BLOCK_HEIGHT
 
     def goto(self, x, y):
-        self.rect.x = x
-        self.rect.y = y
+        self.x = x
+        self.y = y
+
+    def update_position(self):
+        self.rect.x = int(self.x * BLOCK_WIDTH)
+        self.rect.y = int(self.y * BLOCK_HEIGHT)
 
     def is_in_chunk(self, _chunk_):
         if self.chunk_ == _chunk_:
@@ -479,11 +694,13 @@ players = pygame.sprite.Group()
 
 
 def drop_item(x, y, type_, chunk_, dimension):
-    dropped_items.append(drop(x=x, y=y, type_=type_, chunk_=chunk_, dimension_=dimension))
+    dropped_items.append(
+        drop(x=x, y=y, type_=type_, chunk_=chunk_, dimension_=dimension)
+    )
 
 
 # Phyton special words
-#import as while for return is if else elif in not True False def class try except finally raise pass global async break lambda  assert del None or from
+# import as while for return is if else elif in not True False def class try except finally raise pass global async break lambda  assert del None or from
 def is_collide(x1, x2, y1, y2, x_reach=PLAYER_WIDTH // 2, y_reach=PLAYER_HEIGHT):
     if -x_reach <= x1 - x2 <= x_reach:
         if -y_reach <= y1 - y2 <= y_reach:
@@ -528,14 +745,16 @@ def random_end_chunk(pos):
 
 
 # BAD_CHARACTERS LOL
-#!£$?؟
+# !£$?؟
 class hotbar_slot(pygame.sprite.Sprite):
     def __init__(self, number):
         super().__init__()
         self.image = pygame.image.load("images/hotbar_slot.png")
-        self.image = pygame.transform.scale(self.image, (BLOCK_WIDTH * 3, BLOCK_HEIGHT * 3))
+        self.image = pygame.transform.scale(
+            self.image, (BLOCK_WIDTH * 3, BLOCK_HEIGHT * 3)
+        )
         self.rect = self.image.get_rect()
-        self.goto(SPACE_SIZE * 2.95 + number * BLOCK_WIDTH * 3, SCREEN_Y - STRIP_SIZE )
+        self.goto(SPACE_SIZE * 2.95 + number * BLOCK_WIDTH * 3, SCREEN_Y - STRIP_SIZE)
         self.number = number
 
     def goto(self, x, y):
@@ -544,19 +763,26 @@ class hotbar_slot(pygame.sprite.Sprite):
 
     def select(self):
         self.image = pygame.image.load("images/selected_hotbar.png")
-        self.image = pygame.transform.scale(self.image, (BLOCK_WIDTH * 3, BLOCK_HEIGHT * 3))
+        self.image = pygame.transform.scale(
+            self.image, (BLOCK_WIDTH * 3, BLOCK_HEIGHT * 3)
+        )
 
     def unselect(self):
         self.image = pygame.image.load("images/hotbar_slot.png")
-        self.image = pygame.transform.scale(self.image, (BLOCK_WIDTH * 3, BLOCK_HEIGHT * 3))
+        self.image = pygame.transform.scale(
+            self.image, (BLOCK_WIDTH * 3, BLOCK_HEIGHT * 3)
+        )
 
     def update_slot(self, slots):
         if slots == self.number:
             self.select()
         else:
             self.unselect()
+
     def get_number(self):
         return self.number
+
+
 hotbar = pygame.sprite.Group()
 
 
@@ -573,7 +799,10 @@ class heart(pygame.sprite.Sprite):
         self.hp = player_list[self.player__].get_hearts()
         self.update_health()
         self.number = number
-        self.goto(y=SCREEN_Y - HEART_SIZE, x=SPACE_SIZE / 1.4 + ((HEART_SIZE + (HEART_SIZE // 10)) * number))
+        self.goto(
+            y=SCREEN_Y - HEART_SIZE,
+            x=SPACE_SIZE / 1.4 + ((HEART_SIZE + (HEART_SIZE // 10)) * number),
+        )
 
     def empty_heart(self):
         self.image = pygame.image.load("images/empty_heart.png")
@@ -592,7 +821,10 @@ class heart(pygame.sprite.Sprite):
         self.rect.y = y
 
     def update_health(self):
-        self.goto(y=SCREEN_Y - BLOCK_WIDTH * 2, x=SPACE_SIZE / 1.4 + ((HEART_SIZE + (HEART_SIZE // 10)) * self.number))
+        self.goto(
+            y=SCREEN_Y - BLOCK_WIDTH * 2,
+            x=SPACE_SIZE / 1.4 + ((HEART_SIZE + (HEART_SIZE // 10)) * self.number),
+        )
         self.hp = player_list[self.player__].get_hearts()
         player_list[self.player__].update_health()
         if 0 < self.hp <= 50:
@@ -660,11 +892,15 @@ class held_item(pygame.sprite.Sprite):
 
     def change_image(self, new_type):
         if new_type in self.block_color_list:
-            self.image = pygame.Surface((BLOCK_WIDTH * 0.4, BLOCK_HEIGHT * 0.4), pygame.SRCALPHA)
+            self.image = pygame.Surface(
+                (BLOCK_WIDTH * 0.4, BLOCK_HEIGHT * 0.4), pygame.SRCALPHA
+            )
             self.image.fill(self.block_color_list[new_type])
         elif new_type in self.block_image_list:
             self.image = pygame.image.load(block_image_list[new_type])
-            self.image = pygame.transform.scale(self.image, (BLOCK_WIDTH * 0.4, BLOCK_HEIGHT * 0.4))
+            self.image = pygame.transform.scale(
+                self.image, (BLOCK_WIDTH * 0.4, BLOCK_HEIGHT * 0.4)
+            )
         else:
             self.image = pygame.Surface((0, 0), pygame.SRCALPHA)
 
@@ -679,8 +915,10 @@ class held_item(pygame.sprite.Sprite):
         self.goto_player()
 
     def goto_player(self):
-        self.goto(player_list[controlled_player_name].rect.x + BLOCK_WIDTH,
-                  player_list[controlled_player_name].rect.y + BLOCK_HEIGHT)
+        self.goto(
+            player_list[controlled_player_name].rect.x + BLOCK_WIDTH,
+            player_list[controlled_player_name].rect.y + BLOCK_HEIGHT,
+        )
 
 
 class hotbar_item(pygame.sprite.Sprite):
@@ -694,8 +932,12 @@ class hotbar_item(pygame.sprite.Sprite):
         self.player_list = player_list
         self.image = pygame.Surface((BLOCK_WIDTH, BLOCK_HEIGHT), pygame.SRCALPHA)
         self.rect = self.image.get_rect()
-        self.goto(SPACE_SIZE * 3.05 + number * BLOCK_WIDTH * 3, SCREEN_Y - STRIP_SIZE /1.22)
-        self.change_image(new_type=player_list[controlled_player_name].give_hotbar_slot_items(number))
+        self.goto(
+            SPACE_SIZE * 3.05 + number * BLOCK_WIDTH * 3, SCREEN_Y - STRIP_SIZE / 1.22
+        )
+        self.change_image(
+            new_type=player_list[controlled_player_name].give_hotbar_slot_items(number)
+        )
         self.number = number
 
     def goto(self, x, y):
@@ -707,11 +949,15 @@ class hotbar_item(pygame.sprite.Sprite):
 
     def change_image(self, new_type):
         if new_type in self.block_color_list:
-            self.image = pygame.Surface((BLOCK_WIDTH * 1.5, BLOCK_HEIGHT * 1.5), pygame.SRCALPHA)
+            self.image = pygame.Surface(
+                (BLOCK_WIDTH * 1.5, BLOCK_HEIGHT * 1.5), pygame.SRCALPHA
+            )
             self.image.fill(self.block_color_list[new_type])
         elif new_type in self.block_image_list:
             self.image = pygame.image.load(block_image_list[new_type])
-            self.image = pygame.transform.scale(self.image, (BLOCK_WIDTH * 1.5, BLOCK_HEIGHT * 1.5))
+            self.image = pygame.transform.scale(
+                self.image, (BLOCK_WIDTH * 1.5, BLOCK_HEIGHT * 1.5)
+            )
         else:
             self.image = pygame.Surface((BLOCK_WIDTH, BLOCK_HEIGHT), pygame.SRCALPHA)
             self.image.fill("black")
@@ -730,8 +976,10 @@ class gold_heart(pygame.sprite.Sprite):
         self.hp = player_list[self.player__].get_gold_hearts()
         self.update_health()
         self.number = int(number)
-        self.goto(y=SCREEN_Y - HEART_SIZE * 3,
-                  x=SPACE_SIZE / 1.4 + ((HEART_SIZE + (HEART_SIZE // 10)) * number))
+        self.goto(
+            y=SCREEN_Y - HEART_SIZE * 3,
+            x=SPACE_SIZE / 1.4 + ((HEART_SIZE + (HEART_SIZE // 10)) * number),
+        )
 
     def half_heart(self):
         self.image = pygame.image.load("images/half_gold_heart.png")
@@ -790,6 +1038,8 @@ class gold_heart(pygame.sprite.Sprite):
             self.half_heart()
         else:
             self.empty_heart()
+
+
 class text(pygame.sprite.Sprite):
     def __init__(self, content, font_size, color, position):
         super().__init__()
@@ -801,29 +1051,40 @@ class text(pygame.sprite.Sprite):
         self.text_surface = self.font.render(self.content, True, self.color)
         self.image = self.text_surface
         self.rect = self.text_surface.get_rect(topleft=self.position)
-for a in range(2):#remove
-    drop_item(300, 0, "lapis ore", 0, "overworld")
-    drop_item(300, 0, "redstone ore", 0, "overworld")
-    drop_item(300, 0, "nether gold ore", 0, "overworld")
-    drop_item(300, 0, "gold ore", 0, "overworld")
-    drop_item(300, 0, "cactus", 0, "overworld")
-    drop_item(300, 0, "diamond ore", 0, "overworld")
-    drop_item(300, 0, "netherack", 0, "overworld")
-    drop_item(300, 0, "sand", 0, "overworld")
-    drop_item(300, 0, "grass", 0, "overworld")
-    drop_item(300, 0, "dirt", 0, "overworld")
-    drop_item(300, 0, "stone", 0, "overworld")
-    drop_item(300, 0, "end stone", 0, "overworld")
+
+
+for a in range(2):  # remove
+    drop_item(25, 0, "lapis ore", 0, "overworld")
+    drop_item(25, 0, "redstone ore", 0, "overworld")
+    drop_item(25, 0, "nether gold ore", 0, "overworld")
+    drop_item(25, 0, "gold ore", 0, "overworld")
+    drop_item(25, 0, "cactus", 0, "overworld")
+    drop_item(25, 0, "diamond ore", 0, "overworld")
+    drop_item(25, 0, "netherack", 0, "overworld")
+    drop_item(25, 0, "sand", 0, "overworld")
+    drop_item(25, 10, "grass", 0, "overworld")
+    drop_item(25, 10, "dirt", 0, "overworld")
+    drop_item(25, 10, "stone", 0, "overworld")
+    drop_item(25, 10, "end stone", 0, "overworld")
+
+
 def hotbar_text(number):
-    content=player_list[controlled_player_name].give_hotbar_slot_numbers(number)
+    content = player_list[controlled_player_name].give_hotbar_slot_numbers(number)
     if int(content) > 1:
-        size = BLOCK_WIDTH*2
+        size = BLOCK_WIDTH * 2
         color = "white"
-        x = SPACE_SIZE * 3.1 +number*BLOCK_WIDTH*3
-        y=SCREEN_Y - STRIP_SIZE / 3
-        return text(str(content), size, color, (x,y))
+        x = SPACE_SIZE * 3.1 + number * BLOCK_WIDTH * 3
+        y = SCREEN_Y - STRIP_SIZE / 3
+        return text(str(content), size, color, (x, y))
     else:
-        return text("", 0, "black", (SPACE_SIZE * 2.95 + number * BLOCK_WIDTH * 3, SCREEN_Y - STRIP_SIZE / 2))
+        return text(
+            "",
+            0,
+            "black",
+            (SPACE_SIZE * 2.95 + number * BLOCK_WIDTH * 3, SCREEN_Y - STRIP_SIZE / 2),
+        )
+
+
 hotbar_itemz = pygame.sprite.Group()
 random_overworld_chunk(0)
 random_nether_chunk(0)
@@ -831,6 +1092,6 @@ random_end_chunk(0)
 drp_sprites = pygame.sprite.Group()
 heart_list = pygame.sprite.Group()
 held_items = pygame.sprite.Group()
-player_list[controlled_player_name].pick_up_item("copper ore")#remove
-player_list[controlled_player_name].pick_up_item("quartz ore")#remove
-hotbar_amount=pygame.sprite.Group()
+player_list[controlled_player_name].pick_up_item("copper ore")  # remove
+player_list[controlled_player_name].pick_up_item("quartz ore")  # remove
+hotbar_amount = pygame.sprite.Group()
