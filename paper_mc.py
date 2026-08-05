@@ -22,7 +22,7 @@ while running:
         hotbar_itemz.add(hotbar_item(a))
     held_items.add(held_item())
     for e in held_items:
-        e.update_image(slot-1)
+        e.update_image(slot)
     for ae in hotbar_itemz:
         ae.change_image(player_list[controlled_player_name].give_hotbar_slot_items(ae.num()))
     controlled_player = player_list[controlled_player_name]
