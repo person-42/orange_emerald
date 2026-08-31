@@ -1,0 +1,67 @@
+for Anyone who wants to help/pull request this project, I would recommend helping me do these things:
+
+#air color (to draw item backgrounds:"0dcaf0")
+add more items:
+    crafting table.
+    anvil.
+    smithing table.
+    furnace.
+    steak.
+    raw beef.
+    cooked chicken.
+    raw chicken.
+    raw mutton.
+    cooked mutton.
+    ancient debris.
+    crossbow.
+    charging crossbow.
+    charged crossbow.
+    bread.
+    portal lighter.
+    nether portal block.
+    end portal block.
+    end portal frame uncharged.
+    end portal frame charged.
+    enchanting table.
+    book.
+    brewing stand.
+    heavy core.
+    glowstone block.
+    open trapdoor.
+    closed trapdoor.
+    trapdoor.
+    nether wart.
+    ungrown nether wart.
+    grown nether wart.
+    soul sand.
+
+
+
+add coordinates and chunk coordinates.
+add an inventory.
+add dropping items from inventory and hotbar.
+add chat.
+add dying and death screen.
+add crafting and furnaces.
+add tool functionality.
+add arrow class and Ender pearl class.
+add bow and crossbow functionality
+make projectiles actually work.
+add chests for storage.
+add armor protection.
+for armor add a parameter on player.damage(armor_protection=True/False).
+add a nether dimension with a nether portal block and portal obsidian that drops obsidian and returns is_air=True.
+add nether biomes and chunks.
+add smithing templates and trims.
+add the netherite version of armor/tools/netherite upgrades.
+add structures that give trims and have a chance of spawning on biomes.py
+add mobs some can damage and some are passive.
+add mob spawners for the structures.
+add potion effects and potions
+add an end dimension and strongholds.
+add the Ender dragon and Elytra.
+make Elytra let you fly.
+add enchants.
+add durability.
+make the objects storable in a JSON format in a postgres database.
+make the entire game runnable with a command paper_mc.run("player1").
