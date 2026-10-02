@@ -1,6 +1,8 @@
 from flask import jsonify, request, make_response, send_from_directory, abort, render_template, flash, redirect, url_for, session, Flask
 import os
+from color_api import color_api
 app = Flask(__name__)
+app.register_blueprint(color_api)
 # REMOVE DOCSTRING WHEN FORWARDING TO HOSTING SERVICE
 """app.secret_key=os.environ.get('FLASK_SECRET_KEY')"""
 @app.route('/')
