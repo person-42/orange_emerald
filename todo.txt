@@ -34,12 +34,15 @@ add more items:
     ungrown nether wart.
     grown nether wart.
     soul sand.
+    leather.
+    glass bottle.
+    bed.
+    chorus fruit block.
+    chorus fruit.
 
 
 
-add coordinates and chunk coordinates.
-add an inventory.
-add dropping items from inventory and hotbar.
+
 add chat.
 add dying and death screen.
 add crafting and furnaces.
@@ -65,3 +68,8 @@ add enchants.
 add durability.
 make the objects storable in a JSON format in a postgres database.
 make the entire game runnable with a command paper_mc.run("player1").
+remove everything with #remove and remove dumb comments.
+
+errors:
+loading images each time a block generates.
+objects stored as sprite objects.
