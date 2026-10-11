@@ -23,8 +23,9 @@ def api():
 @app.route('/hadith')
 def hadith():
     return render_template('hadith.html')
-#@app.route('/games/paper_minecraft')
-#do later
+@app.route('/games/paper_minecraft')
+def paper_minecraft():
+    return render_template("paper_mc.html")
 def run():
     app.run(host="0.0.0.0",port=5000)# Change to port 80 before publishing
 if __name__ == '__main__':
